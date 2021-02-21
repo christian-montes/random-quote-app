@@ -5,8 +5,10 @@ import _ from "lodash"
 import { Row, Col, Jumbotron } from 'react-bootstrap';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import './app.scss';
+import './styles.scss';
 
 // Creating the Redux Store
 const FETCH = 'FETCH';
@@ -39,9 +41,9 @@ class Quote extends Component {
     this.state = {
       isFetching: false,
       error: null,
-      APIData: ''
+      APIData: '',
+      link: ''
     };
-    this.newQuote = this.newQuote.bind(this);
     this.tweetQuote = this.tweetQuote.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
@@ -73,34 +75,54 @@ class Quote extends Component {
     this.fetchData()
   }
 
-  newQuote() {
-    console.log('new quote')
-  }
-
   tweetQuote() {
-    console.log('tweet quote')
+    // eslint-disable-next-line react/prop-types
+    const encodedText = encodeURI(this.props.quotes['content']);
+    const tweetLink = `//www.twitter.com/intent/tweet?text=${encodedText}`
+    this.setState({...this.state, link: tweetLink})
+    console.log('Tweeted');
   }
 
   render() {
+
+    const quoteStyle = {
+      'fontSize': '2.5rem'
+    }
+
+    const authorStyle = {
+      'fontSize': '1.5rem'
+    }
+    console.log(this.state.link)
+
     return (
       <div className='container-fluid'>
-        <Row>
+        <Row className='d-flex w-75 justify-content-start mx-auto'>
           <h2>Welcome to the Random Quote Machine</h2>
         </Row>
-        <Jumbotron fluid>
-          <p className='lead'>
+        <Jumbotron id= 'quote-box' className='mx-auto w-75' fluid>
+          <span id='text' style={quoteStyle}>
             {/*eslint-disable-next-line react/prop-types*/}
-            {this.props.quotes['author']}
-          </p>
-          {/*eslint-disable-next-line react/prop-types*/}
-          {this.props.quotes['content']}
+            &quot;{this.props.quotes['content']}&quot;
+          </span>
+          <br />
+          <span id='author' style={authorStyle} className='float-right px-2 font-italic'>
+            {/*eslint-disable-next-line react/prop-types*/}
+            -{this.props.quotes['author']}
+          </span>
         </Jumbotron>
-        <Row>
+        <Row className='mx-auto w-75'>
           <Col>
-            <button className='btn btn-primary btn-block col-md-6'>Tweet Quote</button>
+            {/*eslint-disable-next-line react/jsx-no-target-blank*/}
+            <a
+              id='tweet-quote'
+              className='btn btn-primary btn-block' 
+              onClick={this.tweetQuote}
+              href={this.state.link} 
+              target='_blank' ><FontAwesomeIcon icon={faTwitter}/> Tweet Quote
+            </a>
           </Col>
           <Col>
-            <button className='btn btn-danger col-md-6' onClick={this.fetchData}>Get New Quote</button>
+            <button className='btn btn-danger btn-block' onClick={this.fetchData}>Get New Quote</button>
           </Col>
         </Row>
       </div>
