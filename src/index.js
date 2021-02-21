@@ -2,24 +2,26 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash"
-import { Row, Button } from 'react-bootstrap';
+import { Row, Col, Jumbotron } from 'react-bootstrap';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css'
+// import './app.scss';
 
 // Creating the Redux Store
 const FETCH = 'FETCH';
 
-const fetchQuote = (data) => {
+const fetchQuote = (quote) => {
   return {
     type: FETCH,
-    data
+    quote: quote
   }
 }
 
-const quoteReducer = (state = '', action) => {
+const quoteReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH:
-      return action.data
+      return action.quote
     
     default:
       return state
@@ -37,7 +39,7 @@ class Quote extends Component {
     this.state = {
       isFetching: false,
       error: null,
-      quoteData: ''
+      APIData: ''
     };
     this.newQuote = this.newQuote.bind(this);
     this.tweetQuote = this.tweetQuote.bind(this);
@@ -51,7 +53,9 @@ class Quote extends Component {
       .then(response => response.json())
       .then(
         (result) => {
-          this.setState({quoteData: result, isFetching: false});
+          this.setState({APIData: result, isFetching: false});
+          // eslint-disable-next-line react/prop-types
+          this.props.sendNewData(this.state.APIData);
           console.log(result);
         })
       .catch(e => {
@@ -59,10 +63,9 @@ class Quote extends Component {
         this.setState({...this.state, isFetching: false})
       });
 
-    // eslint-disable-next-line react/prop-types
-    this.props.sendNewData(this.state.data);
+
     this.setState({
-      quoteData: ''
+      APIData: ''
     })
   }
 
@@ -80,14 +83,25 @@ class Quote extends Component {
 
   render() {
     return (
-      <div>
+      <div className='container-fluid'>
         <Row>
           <h2>Welcome to the Random Quote Machine</h2>
         </Row>
-        <span>{this.state.quoteData['author']}</span>
+        <Jumbotron fluid>
+          <p className='lead'>
+            {/*eslint-disable-next-line react/prop-types*/}
+            {this.props.quotes['author']}
+          </p>
+          {/*eslint-disable-next-line react/prop-types*/}
+          {this.props.quotes['content']}
+        </Jumbotron>
         <Row>
-          <Button>Tweet Quote</Button>
-          <Button variant='secondary' onClick={this.fetchData}>Get New Quote</Button>
+          <Col>
+            <button className='btn btn-primary btn-block col-md-6'>Tweet Quote</button>
+          </Col>
+          <Col>
+            <button className='btn btn-danger col-md-6' onClick={this.fetchData}>Get New Quote</button>
+          </Col>
         </Row>
       </div>
     )
@@ -102,10 +116,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     sendNewData: (quote) => {
-      dispatch(fetchQuote(quote));
+      dispatch(fetchQuote(quote))
     } 
   }
-}
+};
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Quote);
 
