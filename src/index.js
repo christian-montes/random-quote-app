@@ -7,6 +7,7 @@ import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.scss';
 
@@ -30,7 +31,8 @@ const quoteReducer = (state = {}, action) => {
   }
 }
 
-const store = createStore(quoteReducer);
+const store = createStore(quoteReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // Creating React Component
 
@@ -56,7 +58,6 @@ class Quote extends Component {
       .then(
         (result) => {
           this.setState({APIData: result, isFetching: false});
-          // eslint-disable-next-line react/prop-types
           this.props.sendNewData(this.state.APIData);
           console.log(result);
         })
@@ -76,7 +77,6 @@ class Quote extends Component {
   }
 
   tweetQuote() {
-    // eslint-disable-next-line react/prop-types
     const encodedText = encodeURI(this.props.quotes['content']);
     const tweetLink = `//www.twitter.com/intent/tweet?text=${encodedText}`
     this.setState({...this.state, link: tweetLink})
@@ -95,13 +95,12 @@ class Quote extends Component {
     console.log(this.state.link)
 
     return (
-      <div className='container-fluid'>
+      <div id= 'quote-box' className='container-fluid mx-auto w-75'>
         <Row className='d-flex w-75 justify-content-start mx-auto'>
           <h2>Welcome to the Random Quote Machine</h2>
         </Row>
-        <Jumbotron id= 'quote-box' className='mx-auto w-75' fluid>
+        <Jumbotron className='mx-auto w-75' fluid>
           <span id='text' style={quoteStyle}>
-            {/*eslint-disable-next-line react/prop-types*/}
             &quot;{this.props.quotes['content']}&quot;
           </span>
           <br />
@@ -122,13 +121,23 @@ class Quote extends Component {
             </a>
           </Col>
           <Col>
-            <button className='btn btn-danger btn-block' onClick={this.fetchData}>Get New Quote</button>
+            <button 
+              id='new-quote'
+              className='btn btn-danger btn-block' 
+              onClick={this.fetchData}>Get New Quote</button>
           </Col>
         </Row>
       </div>
     )
   }
 }
+
+
+Quote.propTypes = {
+  sendNewData: PropTypes.func.isRequired,
+  quotes: PropTypes.object.isRequired
+}
+
 
 // creating functions for the Provider component
 const mapStateToProps = (state) => {
