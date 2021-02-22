@@ -20,7 +20,7 @@ module.exports = {
 
     plugins: [
         new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-        new HtmlWebpackPlugin({ title: 'Development' }),
+        new HtmlWebpackPlugin({ title: 'Random Quote Machine' }),
         new ESLintPlugin(),
     ],
 
