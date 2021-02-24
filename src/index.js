@@ -95,11 +95,11 @@ class Quote extends Component {
     console.log(this.state.link)
 
     return (
-      <div id= 'quote-box' className='container-fluid mx-auto w-75'>
-        <Row className='d-flex w-75 justify-content-start mx-auto'>
+      <div id= 'quote-box' className='container-fluid mx-auto col-md-8 col-xs-12'>
+        <Row className='d-flex col-md-8 col-xs-12 justify-content-start mx-auto'>
           <h2>Welcome to the Random Quote Machine</h2>
         </Row>
-        <Jumbotron className='mx-auto w-75' fluid>
+        <Jumbotron className='mx-auto col-md-8 col-xs-12' fluid>
           <span id='text' style={quoteStyle}>
             &quot;{this.props.quotes['content']}&quot;
           </span>
@@ -109,7 +109,7 @@ class Quote extends Component {
             -{this.props.quotes['author']}
           </span>
         </Jumbotron>
-        <Row className='mx-auto w-75'>
+        <Row className='mx-auto col-md-8 col-xs-12'>
           <Col>
             {/*eslint-disable-next-line react/jsx-no-target-blank*/}
             <a
