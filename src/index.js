@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash"
-import { Row, Col, Jumbotron } from 'react-bootstrap';
+import { Row, Jumbotron } from 'react-bootstrap';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -95,11 +95,11 @@ class Quote extends Component {
     console.log(this.state.link)
 
     return (
-      <div id= 'quote-box' className='container-fluid mx-auto col-md-8 col-xs-12'>
-        <Row className='d-flex col-md-8 col-xs-12 justify-content-start mx-auto'>
+      <div id= 'quote-box' className='container-fluid mx-auto col-lg-8 col-xs-12'>
+        <Row className='d-flex justify-content-start mx-auto'>
           <h2>Welcome to the Random Quote Machine</h2>
         </Row>
-        <Jumbotron className='mx-auto col-md-8 col-xs-12' fluid>
+        <Jumbotron className='mx-auto' fluid>
           <span id='text' style={quoteStyle}>
             &quot;{this.props.quotes['content']}&quot;
           </span>
@@ -109,8 +109,8 @@ class Quote extends Component {
             -{this.props.quotes['author']}
           </span>
         </Jumbotron>
-        <Row className='mx-auto col-md-8 col-xs-12'>
-          <Col>
+        <div className='d-flex flex-lg-row flex-column justify-content-center'>
+          <div className='col-lg row-xs mb-1'>
             {/*eslint-disable-next-line react/jsx-no-target-blank*/}
             <a
               id='tweet-quote'
@@ -119,14 +119,14 @@ class Quote extends Component {
               href={this.state.link} 
               target='_blank' ><FontAwesomeIcon icon={faTwitter}/> Tweet Quote
             </a>
-          </Col>
-          <Col>
+          </div>
+          <div className='col-lg row-xs'>
             <button 
               id='new-quote'
               className='btn btn-danger btn-block' 
               onClick={this.fetchData}>Get New Quote</button>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
     )
   }
